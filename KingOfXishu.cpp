@@ -1,0 +1,192 @@
+﻿// KingOfXishu.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+
+#include <iostream>
+#include <queue>
+#include <vector>
+#include "Node.h"
+#include "ParentA.h"
+#include "ParentB.h"
+#include "TreeNode.h"
+using namespace std;
+
+vector<int> makeVector(size_t n) {
+  vector<int> out;
+  for (size_t i = 0; i < n; i++) {
+    out.push_back(i);
+  }
+  return out;
+}
+
+/**
+ * 构建二叉树
+ */
+TreeNode<int>* makeTree(vector<int> input, size_t rootIndex);
+TreeNode<int>* makeTree(vector<int> input, size_t rootIndex) {
+  if (rootIndex >= input.size()) {
+    return nullptr;
+  }
+  int current = input[rootIndex];
+  // TreeNode root,用这种方式创建的对象出了栈就直接被销毁，它分配内存在栈空间
+
+  TreeNode<int>* root = new TreeNode<int>(current);
+  root->left = makeTree(input, rootIndex * 2 + 1);
+  root->right = makeTree(input, rootIndex * 2 + 2);
+  return root;
+}
+
+void printTreeNode(TreeNode<int>* root) {
+  if (root == nullptr) {
+    return;
+  }
+  cout << root->value;
+  printTreeNode(root->left);
+  printTreeNode(root->right);
+}
+
+/**
+ * 层序遍历二叉树
+ */
+void visitTreeNode(TreeNode<int>* root) {
+  queue<TreeNode<int>*> q;
+  q.push(root);
+  while (q.size() > 0) {
+    TreeNode<int>* top = q.front();
+    cout << top->value;
+    q.pop();
+    if (top->left) {
+      q.push(top->left);
+    }
+    if (top->right) {
+      q.push(top->right);
+    }
+  }
+  cout << "\n";
+}
+
+/**
+ * 公共父节点
+ */
+TreeNode<int>* publicFather(TreeNode<int>* root,
+                            TreeNode<int>* p,
+                            TreeNode<int>* q) {
+  if (!root || root == p || root == q) {
+    return root;
+  }
+  TreeNode<int>* left = publicFather(root->left, p, q);
+  TreeNode<int>* right = publicFather(root->right, p, q);
+  if (left && right) {
+    return root;
+  }
+  return left ? left : right;
+}
+
+/**
+ * 函数指针
+ */
+void funcPointCallBack();
+void funcPointCallBack() {
+  pa::ParentA v_pa(1);
+  // 所以使用类的成员函数作为回调函数的解决方法有两种：不使用成员函数(使用友元操作符friend的C函数访问类的数据成员)；使用静态成员函数
+  int res = v_pa.add_2(4, 2, pa::ParentA::add_1);
+}
+
+/*最小公共父节点*/
+void callPublicFather() {
+  TreeNode<int>* root = makeTree(makeVector(10), 0);
+  TreeNode<int>* p = root;
+  TreeNode<int>* q = root;
+
+  while (p) {
+    if (p->value == 3) {
+      break;
+    }
+    p = p->left;
+  }
+
+  while (q) {
+    if (q->value == 6) {
+      break;
+    }
+    q = q->right;
+  }
+  cout << publicFather(root, p, q)->value;
+}
+
+Node<int>* makeLinkedList(int size) {
+  Node<int>* head = nullptr;
+  Node<int>* p = nullptr;
+  for (int i = 0; i < size; i++) {
+    Node<int>* cur = new Node<int>(i);
+    if (head == nullptr) {
+      head = cur;
+      p = cur;
+    } else {
+      p->next = cur;
+      p = p->next;
+    }
+  }
+  return head;
+}
+
+void printLinkedList(Node<int>* head) {
+  while (head) {
+    cout << head->getValue();
+    head = head->next;
+  }
+  cout << "\n";
+}
+
+/*倒置 m-n*/
+/*1->2->3->4->5*/
+Node<int>* reverseLinkedListbyK(Node<int>* head, int m, int n) {
+  Node<int>* dummy = new Node<int>(-1);
+  dummy->next = head;
+  Node<int>* pre = dummy;
+  Node<int>* cur = nullptr;
+  for (size_t i = 0; i < m - 1; i++) {
+    pre = pre->next;
+  }
+  cur = pre->next;
+  for (size_t i = 0; i < n - m; i++) {
+    Node<int>* tmp = cur->next;
+    cur->next = tmp->next;
+    tmp->next = pre->next;
+    pre->next = tmp;
+  }
+  return dummy->next;
+}
+
+Node<int>* insterSortList(Node<int>* head) {
+  Node<int>* dummy = new Node<int>(-1);
+  Node<int>* cur = dummy;
+  while (head) {
+    // head 指向的将要被排序的节点
+    Node<int>* tmp = head->next;
+    cur = dummy;
+    //遍历排好序的列表
+    while (cur->next && cur->next->getValue() <= head->getValue()) {
+      cur = cur->next;
+    }
+    // cur
+    // 指向的是排好序的节点中最后一个小于等于插入节点（head）的节点，将head插入在它后面即可
+    head->next = cur->next;
+    cur->next = head;
+    head = tmp;
+  }
+  return dummy->next;
+}
+
+int main() {
+  funcPointCallBack();
+  makeTree(makeVector(10), 0);
+  printTreeNode(makeTree(makeVector(10), 0));
+  cout << "\n";
+  visitTreeNode(makeTree(makeVector(10), 0));
+  callPublicFather();
+  cout << "\n";
+  Node<int>* head = makeLinkedList(5);
+  printLinkedList(reverseLinkedListbyK(head, 2, 5));
+
+  printLinkedList(insterSortList(head));
+}
