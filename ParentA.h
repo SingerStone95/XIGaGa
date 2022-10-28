@@ -1,6 +1,7 @@
 #pragma once
 
 namespace pa {
+
 class ParentA {
  public:
   void parent();

@@ -2,14 +2,16 @@
 //
 
 #include <iostream>
+#include <aclapi.h>
 #include <queue>
 #include <vector>
 #include "Node.h"
 #include "ParentA.h"
 #include "ParentB.h"
 #include "TreeNode.h"
+#include "globalv.h"
 using namespace std;
-
+int g_int = 0;
 vector<int> makeVector(size_t n) {
   vector<int> out;
   for (size_t i = 0; i < n; i++) {
@@ -169,12 +171,58 @@ Node<int>* insterSortList(Node<int>* head) {
       cur = cur->next;
     }
     // cur
-    // 指向的是排好序的节点中最后一个小于等于插入节点（head）的节点，将head插入在它后面即可
+    // 指向的是排好序的节点中最后一个小于等于插入节点（head）的节点，将head插入在它(cur)后面即可
     head->next = cur->next;
     cur->next = head;
     head = tmp;
   }
   return dummy->next;
+}
+
+Node<int>* mergeSort(Node<int>* head1, Node<int>* head2) {
+  return 0;
+}
+
+int debugSogouLevel() {
+ STARTUPINFO si = {sizeof(STARTUPINFO)};
+  PROCESS_INFORMATION pi = {0};
+  //char lpWStr[] =
+  //    "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" \"C:\\Project\\sogouexplorer\\bin\Debug\" \"-type2\"";
+
+  char lpWStr[] =
+      "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" -GetImage2_200 27046";
+
+    //char lpWStr[] =
+    //  "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" -extract \"C:\\Project\\sogouexplorer\\bin\Debug\"";
+  
+  //char lpWStr[] =
+  //    "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\sogou_explorer_11.0.1.35428_0000.exe\"";
+  HANDLE hMapping = ::CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0,
+                          (200 * 1024) + 4, "SE_CHANGELOG_IMAGE_27046");
+  if (!hMapping) {
+    return 0;
+  }
+  if (::CreateProcess(NULL, lpWStr, NULL, NULL, FALSE, 0, NULL, NULL,
+                      &si, &pi)) {
+    ::WaitForSingleObject(pi.hProcess, INFINITE);
+    char* lpszData =
+        (char*)::MapViewOfFile(hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    if (lpszData) {
+      DWORD dwSize = *(DWORD*)lpszData;  // 4字节存长度
+      char* pRealData = lpszData + 4; //数据的起始值
+      cout << dwSize;
+      char szBuffer[65536];
+      sprintf(szBuffer, "%s", pRealData);
+      cout << szBuffer;
+    }
+
+
+    ::CloseHandle(pi.hProcess);
+    ::CloseHandle(pi.hThread);
+  }
+  DWORD error_code = GetLastError();
+  std::cout<<"";
+  return 0;
 }
 
 int main() {
@@ -187,6 +235,9 @@ int main() {
   cout << "\n";
   Node<int>* head = makeLinkedList(5);
   printLinkedList(reverseLinkedListbyK(head, 2, 5));
-
   printLinkedList(insterSortList(head));
+  debugSogouLevel();
+  pb::ParentB* pb = new pb::ParentB();
+  pb->parentB();
+  cout << g_int << " " << &g_int;
 }

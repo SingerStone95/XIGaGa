@@ -1,7 +1,9 @@
 #include "ParentA.h"
 #include <iostream>
 using namespace std;
+
 namespace pa {
+
 void ParentA::parent() {
   cout << "ParentA parent\n";
 }
