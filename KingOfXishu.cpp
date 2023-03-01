@@ -10,6 +10,9 @@
 #include "ParentB.h"
 #include "TreeNode.h"
 #include "globalv.h"
+#include "ModuleA.h"
+//#include "ModuleB.h"
+#include"time.h"
 using namespace std;
 int g_int = 0;
 vector<int> makeVector(size_t n) {
@@ -225,6 +228,83 @@ int debugSogouLevel() {
   return 0;
 }
 
+/*
+* 研究下强制拷贝
+*/
+int FileCopyTest() {
+
+
+    return 0;
+}
+
+bool isMatch2(std::wstring s, std::wstring p) {
+  int n = s.size(), m = p.size();
+  int i = 0, j = 0, iStart = -1, jStart = -1;
+  while (i < n) {
+    if (j < m && (s[i] == p[j] || p[j] == '?')) {
+      i++;
+      j++;
+    } else if (j < m && p[j] == '*') {
+      iStart = i;
+      jStart = j++;
+    } else if (iStart >= 0) {
+      i = ++iStart;
+      j = jStart + 1;
+    } else
+      return false;
+  }
+  while (j < m && p[j] == '*')
+    j++;
+  return j == m;
+}
+
+bool isMatch(std::wstring s, std::wstring p) {
+  int m = s.size();
+  int n = p.size();
+  vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+  dp[0][0] = true;
+  for (int i = 1; i <= n; ++i) {
+    if (p[i - 1] == '*') {
+      dp[0][i] = true;
+    } else {
+      break;
+    }
+  }
+  for (int i = 1; i <= m; ++i) {
+    for (int j = 1; j <= n; ++j) {
+      if (p[j - 1] == '*') {
+        dp[i][j] = dp[i][j - 1] | dp[i - 1][j];
+      } else if (p[j - 1] == '?' || s[i - 1] == p[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      }
+    }
+  }
+  return dp[m][n];
+}
+
+void TestIsMatchs() {
+  clock_t start, finish;
+  start = clock();
+  for (int i = 0; i < 5000; i++) {
+    if (isMatch(L"C:"
+                L"\\Users\\yogachen\\AppData\\Roaming\\SogouExplorer\\368859fc2"
+                L"628f9a13427c69ff0bbddce\\DailyBackup\\adbdata.dat.2022-12-08",
+                L"C:\\Users\\yogachen\\AppData\\Roaming\\SogouExplorer\\*"
+                L"\\DailyBackup\\*")) {
+      // cout << "success";
+    }
+  }
+  finish = clock();
+  printf("%f seconds\n", (double)(finish - start) / CLOCKS_PER_SEC);
+}
+
+void TestGlobalVar() {
+  pb::ParentB* pb = new pb::ParentB();
+  pb->parentB();
+  cout << g_int << " " << &g_int;
+  RunModuleA();
+  //RunModuleB();
+}
 int main() {
   funcPointCallBack();
   makeTree(makeVector(10), 0);
@@ -237,7 +317,6 @@ int main() {
   printLinkedList(reverseLinkedListbyK(head, 2, 5));
   printLinkedList(insterSortList(head));
   debugSogouLevel();
-  pb::ParentB* pb = new pb::ParentB();
-  pb->parentB();
-  cout << g_int << " " << &g_int;
+
+  TestGlobalVar();
 }
