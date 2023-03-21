@@ -11,6 +11,7 @@
 #include "TreeNode.h"
 #include "globalv.h"
 #include "ModuleA.h"
+#include "ModuleB.h"
 //#include "ModuleB.h"
 #include"time.h"
 using namespace std;
@@ -299,17 +300,29 @@ void TestIsMatchs() {
 }
 
 void TestGlobalVar() {
+    //多文件共享变量 
+    //1、 external 声明
+    //2、 定义且只能定义一次（在任意一个源文件定义即可）
+    //3、 多处修改
   pb::ParentB* pb = new pb::ParentB();
   pb->parentB();
   cout << g_int << " " << &g_int;
   RunModuleA();
   //RunModuleB();
 }
+
+void TestStaticVar() {
+  // 静态变量不同文件之间是不共享的
+  AddSa();
+  cout << getGlobal(); //通过方法暴露出去就可以
+  cout << "\n";
+  PrintSa();
+}
 int main() {
   funcPointCallBack();
   makeTree(makeVector(10), 0);
   printTreeNode(makeTree(makeVector(10), 0));
-  cout << "\n";
+  cout << ">>>>>>>\n";
   visitTreeNode(makeTree(makeVector(10), 0));
   callPublicFather();
   cout << "\n";
@@ -318,5 +331,6 @@ int main() {
   printLinkedList(insterSortList(head));
   debugSogouLevel();
 
-  TestGlobalVar();
+  //TestGlobalVar();
+  TestStaticVar();
 }
