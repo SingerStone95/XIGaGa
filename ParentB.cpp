@@ -14,4 +14,8 @@ void ParentB::parentB() {
   cout << "ParentB parentB\n";
 }
 
+ParentB::ParentB() {
+  cout << "ParentB()";
+}
+
 }  // namespace pb

@@ -1,19 +1,20 @@
 ﻿// KingOfXishu.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
-#include <iostream>
 #include <aclapi.h>
+#include <iostream>
 #include <queue>
 #include <vector>
+#include "CObj.h"
+#include "ModuleA.h"
+#include "ModuleB.h"
 #include "Node.h"
 #include "ParentA.h"
 #include "ParentB.h"
 #include "TreeNode.h"
 #include "globalv.h"
-#include "ModuleA.h"
-#include "ModuleB.h"
 //#include "ModuleB.h"
-#include"time.h"
+#include "time.h"
 using namespace std;
 int g_int = 0;
 vector<int> makeVector(size_t n) {
@@ -187,57 +188,6 @@ Node<int>* mergeSort(Node<int>* head1, Node<int>* head2) {
   return 0;
 }
 
-int debugSogouLevel() {
- STARTUPINFO si = {sizeof(STARTUPINFO)};
-  PROCESS_INFORMATION pi = {0};
-  //char lpWStr[] =
-  //    "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" \"C:\\Project\\sogouexplorer\\bin\Debug\" \"-type2\"";
-
-  char lpWStr[] =
-      "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" -GetImage2_200 27046";
-
-    //char lpWStr[] =
-    //  "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\QBSetupNew.exe\" -extract \"C:\\Project\\sogouexplorer\\bin\Debug\"";
-  
-  //char lpWStr[] =
-  //    "\"C:\\Project\\sogouexplorer\\_appdata\\Bin\\sogou_explorer_11.0.1.35428_0000.exe\"";
-  HANDLE hMapping = ::CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0,
-                          (200 * 1024) + 4, "SE_CHANGELOG_IMAGE_27046");
-  if (!hMapping) {
-    return 0;
-  }
-  if (::CreateProcess(NULL, lpWStr, NULL, NULL, FALSE, 0, NULL, NULL,
-                      &si, &pi)) {
-    ::WaitForSingleObject(pi.hProcess, INFINITE);
-    char* lpszData =
-        (char*)::MapViewOfFile(hMapping, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-    if (lpszData) {
-      DWORD dwSize = *(DWORD*)lpszData;  // 4字节存长度
-      char* pRealData = lpszData + 4; //数据的起始值
-      cout << dwSize;
-      char szBuffer[65536];
-      sprintf(szBuffer, "%s", pRealData);
-      cout << szBuffer;
-    }
-
-
-    ::CloseHandle(pi.hProcess);
-    ::CloseHandle(pi.hThread);
-  }
-  DWORD error_code = GetLastError();
-  std::cout<<"";
-  return 0;
-}
-
-/*
-* 研究下强制拷贝
-*/
-int FileCopyTest() {
-
-
-    return 0;
-}
-
 bool isMatch2(std::wstring s, std::wstring p) {
   int n = s.size(), m = p.size();
   int i = 0, j = 0, iStart = -1, jStart = -1;
@@ -300,37 +250,53 @@ void TestIsMatchs() {
 }
 
 void TestGlobalVar() {
-    //多文件共享变量 
-    //1、 external 声明
-    //2、 定义且只能定义一次（在任意一个源文件定义即可）
-    //3、 多处修改
+  //多文件共享变量
+  // 1、 external 声明
+  // 2、 定义且只能定义一次（在任意一个源文件定义即可）
+  // 3、 多处修改
   pb::ParentB* pb = new pb::ParentB();
   pb->parentB();
   cout << g_int << " " << &g_int;
   RunModuleA();
-  //RunModuleB();
+  // RunModuleB();
 }
 
 void TestStaticVar() {
   // 静态变量不同文件之间是不共享的
   AddSa();
-  cout << getGlobal(); //通过方法暴露出去就可以
+  cout << getGlobal();  //通过方法暴露出去就可以
   cout << "\n";
   PrintSa();
 }
-int main() {
-  funcPointCallBack();
-  makeTree(makeVector(10), 0);
-  printTreeNode(makeTree(makeVector(10), 0));
-  cout << ">>>>>>>\n";
-  visitTreeNode(makeTree(makeVector(10), 0));
-  callPublicFather();
-  cout << "\n";
-  Node<int>* head = makeLinkedList(5);
-  printLinkedList(reverseLinkedListbyK(head, 2, 5));
-  printLinkedList(insterSortList(head));
-  debugSogouLevel();
 
-  //TestGlobalVar();
-  TestStaticVar();
+void TestObjParam(CObj obj) {
+  // 查看值传递的时候构造函数怎么被选择
+}
+
+void TestConstructor() {
+  // 拷贝构造和移动构造
+
+  CObj o1(100);
+  CObj o2(5);
+  o1 = o2;
+  TestObjParam(std::move(o1));
+}
+
+int main() {
+  // funcPointCallBack();
+  // makeTree(makeVector(10), 0);
+  // printTreeNode(makeTree(makeVector(10), 0));
+  // cout << ">>>>>>>\n";
+  // visitTreeNode(makeTree(makeVector(10), 0));
+  // callPublicFather();
+  // cout << "\n";
+  // Node<int>* head = makeLinkedList(5);
+  // printLinkedList(reverseLinkedListbyK(head, 2, 5));
+  // printLinkedList(insterSortList(head));
+  // debugSogouLevel();
+
+  // TestGlobalVar();
+  // TestStaticVar();
+
+  TestConstructor();
 }
