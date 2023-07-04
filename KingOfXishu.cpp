@@ -278,8 +278,15 @@ void TestConstructor() {
 
   CObj o1(100);
   CObj o2(5);
-  o1 = o2;
-  TestObjParam(std::move(o1));
+ // CObj o2(std::move(o1));
+  
+  std::cout << o1.GetValue() << "\n";
+  std::cout << o2.GetValue() << "\n";
+  //TestObjParam(std::move(o1));
+  //o1 = o2;
+  o1 = std::move(o2);
+  std::cout << o1.GetValue() << "\n";
+  std::cout << o2.GetValue() << "\n";
 }
 
 int main() {
