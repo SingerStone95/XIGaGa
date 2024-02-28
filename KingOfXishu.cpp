@@ -289,21 +289,21 @@ void TestConstructor() {
   std::cout << o2.GetValue() << "\n";
 }
 
-int main() {
-  // funcPointCallBack();
-  // makeTree(makeVector(10), 0);
-  // printTreeNode(makeTree(makeVector(10), 0));
-  // cout << ">>>>>>>\n";
-  // visitTreeNode(makeTree(makeVector(10), 0));
-  // callPublicFather();
-  // cout << "\n";
-  // Node<int>* head = makeLinkedList(5);
-  // printLinkedList(reverseLinkedListbyK(head, 2, 5));
-  // printLinkedList(insterSortList(head));
-  // debugSogouLevel();
-
-  // TestGlobalVar();
-  // TestStaticVar();
-
-  TestConstructor();
-}
+//int main() {
+//  // funcPointCallBack();
+//  // makeTree(makeVector(10), 0);
+//  // printTreeNode(makeTree(makeVector(10), 0));
+//  // cout << ">>>>>>>\n";
+//  // visitTreeNode(makeTree(makeVector(10), 0));
+//  // callPublicFather();
+//  // cout << "\n";
+//  // Node<int>* head = makeLinkedList(5);
+//  // printLinkedList(reverseLinkedListbyK(head, 2, 5));
+//  // printLinkedList(insterSortList(head));
+//  // debugSogouLevel();
+//
+//  // TestGlobalVar();
+//  // TestStaticVar();
+//
+//  //TestConstructor();
+//}

@@ -103,9 +103,11 @@
     <ClCompile Include="ModuleA.cpp" />
     <ClCompile Include="ModuleB.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="NotInclude.cpp" />
     <ClCompile Include="ParentA.cpp" />
     <ClCompile Include="ParentB.cpp" />
     <ClCompile Include="Public.cpp" />
+    <ClCompile Include="Test.cpp" />
     <ClCompile Include="TreeNode.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,10 +117,16 @@
     <ClInclude Include="ModuleA.h" />
     <ClInclude Include="ModuleB.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="NotInclude.h" />
     <ClInclude Include="ParentA.h" />
     <ClInclude Include="ParentB.h" />
     <ClInclude Include="Public.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="TreeNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="XiGaGa.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,13 +9,17 @@ CObj::CObj() {
   std::cout << "CObj()"
             << "\n";
 }
-CObj::~CObj() {}
+CObj::~CObj() {
+  std::cout << "~CObj()"
+            << "\n";
+}
 
-CObj::CObj(const CObj& other) {
+CObj::CObj(CObj& other) {
   std::cout << "CObj(CObj& other) "
             << "\n";
   value_ = other.value_;
 }
+
 CObj::CObj(CObj&& other) {
   std::cout << "CObj(CObj&& other) "
             << "\n";
@@ -29,3 +33,4 @@ CObj& CObj::operator=(CObj other) {
   value_ = other.value_;
   return *this;
 }
+
